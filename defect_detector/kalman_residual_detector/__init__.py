@@ -1,0 +1,1 @@
+from .kalman_residual_defect_detector import detect
