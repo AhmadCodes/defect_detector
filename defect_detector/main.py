@@ -3,6 +3,7 @@ import numpy as np
 import cv2
 import time
 from .detector_factory import ImageDefectDetectionFactory
+from .detector_factory import VideoDefectDetectionFactory
 from .utils import blackout_nonfoil_region
 #%%
 
@@ -73,3 +74,33 @@ class ImageDefectDetector:
         # Return the defect image and defect map
         return defect_image, defect_map, detection_time
     
+
+
+#%% Video Defect Detector Class
+class VideoDefectDetector:
+    def __init__(self, method: str = "background_subtractor") -> None:
+        if method not in ["background_subtractor"]:
+            raise ValueError("Invalid method type.")
+        self.method = method
+        self.defect_detection_method = VideoDefectDetectionFactory.create_defect_detection_method(self.method)
+    
+    def detect_defects(self, video: str) -> str:
+        """
+        Detect defects in a video using the specified method.
+
+        Parameters
+        ----------
+        video : str
+            The video to detect defects in.
+
+        Returns
+        -------
+        str
+            The defect video.
+        """
+
+        output_vid = self.defect_detection_method(video)
+        
+        
+        return output_vid
+        
