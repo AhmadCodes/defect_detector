@@ -84,7 +84,8 @@ class VideoDefectDetector:
         self.method = method
         self.defect_detection_method = VideoDefectDetectionFactory.create_defect_detection_method(self.method)
     
-    def detect_defects(self, video: str) -> str:
+    def detect_defects(self, video: str,
+                       debug:bool=False) -> str:
         """
         Detect defects in a video using the specified method.
 
@@ -99,7 +100,7 @@ class VideoDefectDetector:
             The defect video.
         """
 
-        output_vid = self.defect_detection_method(video)
+        output_vid = self.defect_detection_method(video, debug=debug)
         
         
         return output_vid

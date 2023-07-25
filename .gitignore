@@ -1,3 +1,6 @@
 */*__pycache__
 
+*/*__pycache__/*
+defect_detector/video_bg_sub_detector/__pycache__
 flagged
+flagged/*

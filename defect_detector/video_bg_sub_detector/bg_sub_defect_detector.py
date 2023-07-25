@@ -77,7 +77,7 @@ def thresholding(image: np.ndarray,
     thresholded = cv2.threshold(delta, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
     
     col_avg = np.mean(image, axis=0)
-    col_avg_normalized = (col_avg - np.min(col_avg)) / (np.max(col_avg) - np.min(col_avg))
+    col_avg_normalized = (col_avg - np.min(col_avg)) / ((np.max(col_avg) - np.min(col_avg)) + 1e-6)
 
     thresholded[:, col_avg_normalized<0.5] = 0
     
@@ -176,10 +176,11 @@ def detect(video: str,
         if not isinstance(frame, np.ndarray) or not ret:
             break
         frame = cv2.resize(ret, (output_width, output_height))
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) if frame.ndim == 3 else frame.astype("uint8")
 
         # smoothen and convert to grayscale
         smoothed = cv2.bilateralFilter(frame,15,75,75)
-        gray = cv2.cvtColor(smoothed, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor(smoothed, cv2.COLOR_BGR2GRAY) if smoothed.ndim == 3 else smoothed.astype("uint8")
         # gr = cv2.GaussianBlur(gr, (15, 15), 0)
         # gr = cv2.medianBlur(gr,5)
         gray = cv2.bilateralFilter(gray,15,75,75) #smoothen again
@@ -193,7 +194,7 @@ def detect(video: str,
                 print("background model constructed")
             defect_map = np.zeros_like(frame)
             drawn_image = frame.copy()
-            drawn_image = cv2.putText(drawn_image, "Constructing a background model", (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,255), 2, cv2.LINE_AA)
+            drawn_image = cv2.putText(drawn_image, "Constructing a background model", (50,50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
 
         #When background model is constructed for specified number of intitial frames    
         else:
@@ -210,6 +211,9 @@ def detect(video: str,
         if debug:
             cv2.imshow("Draw Defects", drawn_image)
             cv2.imshow("Defect Map", defect_map)
+            keypress = cv2.waitKey(1) & 0xFF
+            if keypress == ord("q"):
+                break
         
         # write to output video
         out_def_vid.write(drawn_image)

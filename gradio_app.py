@@ -1,7 +1,7 @@
 import gradio as gr
 import cv2
 import numpy as np
-from defect_detector import ImageDefectDetector
+from defect_detector import ImageDefectDetector, VideoDefectDetector
 
 def image_mod(image: np.ndarray,
               method: str,
@@ -32,8 +32,9 @@ def image_mod(image: np.ndarray,
     defect_image, defect_map, timetaken = defect_detector.detect_defects(image, background_image=bg_image, non_foil_blackout=rem_bg)
     return defect_image[...,::-1], defect_map, timetaken
 
-def video_mod(video: str
-              ) -> str:
+def video_mod(  video: str,
+                debug: bool = False
+                ) -> str:
     """
     Parameters
     ----------
@@ -49,9 +50,12 @@ def video_mod(video: str
     tuple[np.ndarray, np.ndarray]
         A tuple containing the defect video and defect map as NumPy arrays.
     """
-    # Your video processing code here...
-
-    return video
+    
+    defect_detector = VideoDefectDetector(method="background_subtractor")
+    
+    output_video = defect_detector.detect_defects(video, debug=debug)
+    
+    return output_video
 
 # Your Gradio app setup with two tabs for image and video data
 methods = ["edge_detector", 
@@ -83,10 +87,11 @@ with gr.Blocks() as demo:
     with gr.Tab("Video Data"):
         with gr.Row():
             with gr.Column():
-                video_input = gr.Video(type="numpy", label="Input Video")
+                video_input = gr.Video(type="file", label="Input Video")
                 video_button = gr.Button("Process Video")
+                debug = gr.Checkbox(label="Debug (Will show processed video via OpenCV HighGUI)")
             with gr.Column():   
-                video_output = gr.Video(type="numpy", label="Defect Detection Video")
+                video_output = gr.Video(type="file", label="Defect Detection Video")
 
 
     image_button.click(image_mod,
@@ -94,7 +99,7 @@ with gr.Blocks() as demo:
                        outputs=[image_output, defect_map_output, time_taken_output])
 
     video_button.click(video_mod,
-                       inputs=[video_input],
+                       inputs=[video_input, debug],
                        outputs=[video_output ])
 
 demo.launch()
