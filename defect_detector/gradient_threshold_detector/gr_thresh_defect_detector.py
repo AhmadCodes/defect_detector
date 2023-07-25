@@ -50,6 +50,10 @@ def detect(image: np.ndarray,
     ## apply closing
     binary_image = cv2.morphologyEx(binary_image, cv2.MORPH_CLOSE, kernel)
 
+    col_avg = np.mean(image, axis=0)
+    col_avg_normalized = (col_avg - np.min(col_avg)) / (np.max(col_avg) - np.min(col_avg))
+
+    binary_image[:, col_avg_normalized<0.5] = 0
 
     # Find contours in the binary image
     contours, _ = cv2.findContours(binary_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)

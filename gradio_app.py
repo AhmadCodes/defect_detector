@@ -29,8 +29,8 @@ def image_mod(image: np.ndarray,
         bg_image.shape = {bg_image.shape if bg_image is not None else None}, \n\
         rem_bg = {rem_bg}")
     defect_detector = ImageDefectDetector(method=method)
-    defect_image, defect_map, _ = defect_detector.detect_defects(image, background_image=bg_image, non_foil_blackout=rem_bg)
-    return defect_image[...,::-1], defect_map
+    defect_image, defect_map, timetaken = defect_detector.detect_defects(image, background_image=bg_image, non_foil_blackout=rem_bg)
+    return defect_image[...,::-1], defect_map, timetaken
 
 methods = ["edge_detector", 
             "background_subtractor",
@@ -43,11 +43,15 @@ demo = gr.Interface(
     fn=image_mod,
     inputs=[gr.Image(type="numpy", label="Input Image"), 
             gr.Dropdown(methods, label="Method"),
-            gr.Image(type="numpy", label="Background Image"),
-            gr.Checkbox( label="Blackout non-foil region")],
-    outputs=[gr.Image(type="numpy",label="Defect Image"), 
-             gr.Image(type="numpy",label="Defect Map")],
+            gr.Image(type="numpy", label="Background Image (Required if method=background_subtractor)"),
+            gr.Checkbox( label="Preprocessing: Blackout non-foil region")],
+    outputs=[gr.Image(type="numpy",label="Defect Detection Image"), 
+             gr.Image(type="numpy",label="Defect Mask Image"),
+             gr.Textbox(label="Time taken (seconds)")],
     flagging_options=["incorrect", "correct"],
+    title="Defect Detection Demo",
+    description="Demo for defect detection in foil-like material using various methods.Prepared by: Ahmad Ali. Github: ahmadCodes",
+
 )
 
 if __name__ == "__main__":

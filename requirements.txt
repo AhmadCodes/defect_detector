@@ -1,0 +1,7 @@
+numpy==1.25.1
+opencv_python==4.8.0.74
+ultralytics==8.0.87
+gradio
+fastapi==0.99.0
+pytest
+sphinx

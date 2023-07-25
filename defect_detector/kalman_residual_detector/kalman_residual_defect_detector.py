@@ -111,6 +111,12 @@ def detect(image: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
 
     # Run the Kalman filter on the columns of the image
     residuals = run_kalman_filter(image)
+    
+    col_avg = np.mean(cv2.cvtColor(image, cv2.COLOR_BGR2GRAY) if image.ndim==3 else image,
+                      axis=0)
+    col_avg_normalized = (col_avg - np.min(col_avg)) / (np.max(col_avg) - np.min(col_avg))
+    
+    residuals[:, col_avg_normalized<0.5] = 0
 
     # Detect defects based on the residuals
     defect_image = map_defects(residuals).astype(np.uint8)

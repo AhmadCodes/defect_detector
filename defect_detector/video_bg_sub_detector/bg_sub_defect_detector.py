@@ -76,6 +76,11 @@ def thresholding(image: np.ndarray,
     # otsu thresholding
     thresholded = cv2.threshold(delta, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
     
+    col_avg = np.mean(image, axis=0)
+    col_avg_normalized = (col_avg - np.min(col_avg)) / (np.max(col_avg) - np.min(col_avg))
+
+    thresholded[:, col_avg_normalized<0.5] = 0
+    
     #see if there is any contours in the thresholded frame
     ( cnts, _) = cv2.findContours(thresholded.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     if len(cnts) == 0: #return nothing if there is no object present
