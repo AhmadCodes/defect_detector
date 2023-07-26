@@ -92,7 +92,7 @@ python defect_detection_app.py
 ```
 The Gradio app will be launched in your default web browser. Follow the link in the terminal e.g. `http://127.0.0.1:7861` to open the GUI on your web browser.
 
-## How to Use the Defect Detection GU
+## How to Use the Defect Detection GUI
 The Defect Detection GUI provides two tabs for processing **image** and **video** data. The app allows you to choose from different defect detection methods.
 
 ### Image Data Tab
