@@ -225,3 +225,7 @@ The `detect_defects()` method returns a tuple containing the following items:
     - Feel free to import the `defect_detector` module into your own Python script or Jupyter Notebook and use these classes and methods to perform defect detection on your own image and video data.
 
     - For more detailed information on the methods, classes, and their parameters, refer to the docstrings in the `defect_detector` module.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
