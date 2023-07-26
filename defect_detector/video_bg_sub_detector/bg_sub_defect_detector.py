@@ -182,7 +182,6 @@ def detect(
     output_width = 3660
     output_fps = int(cap.get(cv2.CAP_PROP_FPS))
     fourcc = cv2.VideoWriter_fourcc(*"mp4v")
-
     if output_video_dir is None:
         output_video_dir = "/tmp"
 
@@ -223,6 +222,8 @@ def detect(
         # gr = cv2.medianBlur(gr,5)
         gray = cv2.bilateralFilter(gray, 15, 75, 75)  # smoothen again
 
+        drawn_image = frame.copy()
+        defect_map = np.zeros_like(frame).astype(np.uint8)
         # Construct background model
         if n_frame < nbg_rec:
             movingAvg(gray, beta)
@@ -230,8 +231,7 @@ def detect(
                 print("Constructing a background model")
             elif n_frame == nbg_rec - 1:
                 print("background model constructed")
-            defect_map = np.zeros_like(frame)
-            drawn_image = frame.copy()
+
             drawn_image = cv2.putText(
                 drawn_image,
                 "Constructing a background model",
@@ -252,8 +252,6 @@ def detect(
             if contours is not None:
                 # make and show bounding boxes over objects in foreground
                 drawn_image = drawcontours(frame, contours)
-            else:
-                drawn_image = frame.copy()
 
         if debug:
             cv2.imshow("Draw Defects", drawn_image)
@@ -263,6 +261,16 @@ def detect(
                 break
 
         # write to output video
+        drawn_image = (
+            cv2.cvtColor(drawn_image, cv2.COLOR_GRAY2BGR)
+            if drawn_image.ndim == 2
+            else drawn_image
+        )
+        defect_map = (
+            cv2.cvtColor(defect_map, cv2.COLOR_GRAY2BGR)
+            if defect_map.ndim == 2
+            else defect_map
+        )
         out_def_vid.write(drawn_image)
         out_def_map_vid.write(defect_map)
 
