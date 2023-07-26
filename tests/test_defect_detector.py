@@ -114,7 +114,7 @@ def test_performance():
     import time
 
     start_time = time.time()
-    defect_image, defect_map, _, _= detector.detect_defects(
+    defect_image, defect_map, _, _ = detector.detect_defects(
         test_image, non_foil_blackout=True
     )
     end_time = time.time()

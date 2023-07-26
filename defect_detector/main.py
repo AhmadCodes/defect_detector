@@ -89,7 +89,7 @@ class ImageDefectDetector:
 
         # Return the defect image and defect map
         return defect_image, defect_map, bboxes, detection_time
-    
+
     def __repr__(self) -> str:
         return f"ImageDefectDetector(method={self.method})"
 

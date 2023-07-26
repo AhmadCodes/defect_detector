@@ -1,14 +1,14 @@
 from setuptools import setup, find_packages
 
-with open('requirements.txt') as f:
+with open("requirements.txt") as f:
     requirements = f.read().splitlines()
 
 setup(
-    name='defect_detector',
-    version='0.0.1',
-    description='Defect Detector Module',
-    author='Ahmad Ali',
-    author_email='amdali97@gmail.com',
+    name="defect_detector",
+    version="0.0.1",
+    description="Defect Detector Module",
+    author="Ahmad Ali",
+    author_email="amdali97@gmail.com",
     packages=find_packages(),
     install_requires=requirements,
     classifiers=[
