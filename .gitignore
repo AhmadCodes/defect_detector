@@ -4,3 +4,11 @@
 defect_detector/video_bg_sub_detector/__pycache__
 flagged
 flagged/*
+
+
+.vscode
+.vscode/*
+
+
+.pytest_cache
+.pytest_cache/*

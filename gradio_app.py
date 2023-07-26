@@ -53,9 +53,9 @@ def video_mod(  video: str,
     
     defect_detector = VideoDefectDetector(method="background_subtractor")
     
-    output_video = defect_detector.detect_defects(video, debug=debug)
+    output_defect_video, output_mask_video = defect_detector.detect_defects(video, debug=debug)
     
-    return output_video
+    return output_defect_video, output_mask_video
 
 # Your Gradio app setup with two tabs for image and video data
 methods = ["edge_detector", 
@@ -92,6 +92,7 @@ with gr.Blocks() as demo:
                 debug = gr.Checkbox(label="Debug (Will show processed video via OpenCV HighGUI)")
             with gr.Column():   
                 video_output = gr.Video(type="file", label="Defect Detection Video")
+                video_output2 = gr.Video(type="file", label="Defect Mask Video")
 
 
     image_button.click(image_mod,
@@ -100,6 +101,6 @@ with gr.Blocks() as demo:
 
     video_button.click(video_mod,
                        inputs=[video_input, debug],
-                       outputs=[video_output ])
+                       outputs=[video_output, video_output2])
 
 demo.launch()
