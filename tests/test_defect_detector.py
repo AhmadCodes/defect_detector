@@ -10,7 +10,7 @@ sys.path.insert(0, "../defect_detector")
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../data"))
 
-from defect_detector import ImageDefectDetector
+from defect_detector import ImageDefectDetector, VideoDefectDetector
 
 
 # Sample test image
@@ -121,3 +121,28 @@ def test_performance():
     elapsed_time = end_time - start_time
     # Assert that the time taken is within acceptable limits
     assert elapsed_time < 5.0
+
+
+
+def test_valid_defect_detection_method():
+    method = "background_subtractor"
+    detector = VideoDefectDetector(method)
+    assert detector.method == method
+
+
+def test_invalid_defect_detection_method():
+    with pytest.raises(ValueError):
+        VideoDefectDetector(method="invalid_method")
+
+
+def test_detect_defects():
+    # Replace 'your_video_path_here' with an actual video path for testing
+    video_path = os.path.join(os.path.dirname(__file__), "../data/test_video.mp4")
+
+    detector = VideoDefectDetector(method="background_subtractor")
+    output_detection_vid, output_mask_vid, frames_bboxes_list = detector.detect_defects(video_path)
+
+    # Assertions based on the expected output of the 'detect_defects' method
+    assert isinstance(output_detection_vid, str)
+    assert isinstance(output_mask_vid, str)
+    assert isinstance(frames_bboxes_list, list)
