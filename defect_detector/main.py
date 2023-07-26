@@ -89,6 +89,9 @@ class ImageDefectDetector:
 
         # Return the defect image and defect map
         return defect_image, defect_map, bboxes, detection_time
+    
+    def __repr__(self) -> str:
+        return f"ImageDefectDetector(method={self.method})"
 
 
 # %% Video Defect Detector Class
@@ -124,3 +127,6 @@ class VideoDefectDetector:
         ) = self.defect_detection_method(video, debug=debug)
 
         return output_detection_vid, output_mask_vid, frames_bboxes_list
+
+    def __repr__(self) -> str:
+        return f"VideoDefectDetector(method={self.method})"

@@ -1,3 +1,26 @@
+# Table of Contents
+
+- [Defect Detection Library and GUI using Gradio](#defect-detection-library-and-gui-using-gradio)
+  - [Introduction](#introduction)
+  - [Getting Started](#getting-started)
+    - [Requirements](#requirements)
+    - [Installation](#installation)
+    - [Installing the `defect_detector` Module as a Library](#installing-the-defect_detector-module-as-a-library)
+      - [Installation Steps](#installation-steps)
+      - [Verifying the Installation](#verifying-the-installation)
+  - [Running the GUI App](#running-the-gui-app)
+  - [How to Use the Defect Detection GUI](#how-to-use-the-defect-detection-gui)
+    - [Image Data Tab](#image-data-tab)
+    - [Video Data Tab](#video-data-tab)
+  - [Using the `defect_detector` Module as a Library](#using-the-defect_detector-module-as-a-library)
+    - [`ImageDefectDetector` Class](#imagedefectdetector-class)
+      - [How to Use `ImageDefectDetector`](#how-to-use-imagedefectdetector)
+    - [`VideoDefectDetector` Class](#videodefectdetector-class)
+      - [Creating a `VideoDefectDetector` Object](#creating-a-videodefectdetector-object)
+      - [Detecting Defects in a Video](#detecting-defects-in-a-video)
+  - [Note](#note)
+
+
 # Defect Detection Library and GUI using Gradio
 
 ![Defect Detection Demo](assets/gradio_demo_screenshot.png)
@@ -29,7 +52,34 @@ You can install the required libraries using pip:
 pip install -r requirements.txt
 ```
 
-## Running the App
+### Installing the `defect_detector` Module as a Library
+To use the `defect_detector` module as a library, you can install it via `pip`. The module requires a few dependencies, which are listed in the `requirements.txt` file.
+
+#### Installation Steps
+- Clone this repository to your local machine or download the source code as a ZIP archive.
+- Navigate to the root directory of the defect_detector project where the setup.py and requirements.txt files are located.
+- Open a terminal or command prompt in that directory.
+- Run the following command to install the module and its dependencies:
+```bash
+pip install .
+```
+This will install the defect_detector module along with the required dependencies listed in the requirements.txt file.
+
+#### Verifying the Installation
+To verify that the defect_detector module is installed correctly, you can run the following Python code in a script or Python interpreter:
+
+```python
+import defect_detector
+
+# Test the ImageDefectDetector class
+image_detector = defect_detector.ImageDefectDetector()
+print(image_detector) # ImageDefectDetector(method=edge_detector)
+
+# Test the VideoDefectDetector class
+video_detector = defect_detector.VideoDefectDetector()
+print(video_detector) # VideoDefectDetector(method=background_subtractor)
+```
+## Running the GUI App
 
 To run the Defect Detection GUI, follow these steps:
 
