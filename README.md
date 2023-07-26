@@ -21,7 +21,7 @@
   - [Note](#note)
 
 
-# Defect Detection Library and GUI using Gradio
+# Defect Detection Library and GUI App
 
 ![Defect Detection Demo](assets/gradio_demo_screenshot.png)
 
