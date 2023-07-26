@@ -56,14 +56,16 @@ def detect(image: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
         image.copy() if image.ndim == 3 else cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
     )
 
+    bboxes = []
     # Draw bounding boxes around the defects
     for contour in contours:
         x, y, w, h = cv2.boundingRect(contour)
+        bboxes.append((x, y, w, h))
         contour_image = cv2.rectangle(
             contour_image, (x, y), (x + w, y + h), (0, 0, 255), 2
         )  # Draw a red bounding box
 
-    return contour_image, defect_map
+    return contour_image, defect_map, bboxes
 
 
 # %% Test the defect detector if run directly
@@ -76,8 +78,9 @@ if __name__ == "__main__":
 
     # Run the defect detector
     t0 = time.time()
-    defect_image, defect_map = detect(test_image)
+    defect_image, defect_map, bboxes = detect(test_image)
     print(f"Time taken: {time.time() - t0:.4f} seconds")
+    print(f"Detected {len(bboxes)} defects")
 
     # Display the results
     cv2.imshow("Defect Image", defect_image)

@@ -33,7 +33,7 @@ def image_mod(
         rem_bg = {rem_bg}"
     )
     defect_detector = ImageDefectDetector(method=method)
-    defect_image, defect_map, timetaken = defect_detector.detect_defects(
+    defect_image, defect_map, _, timetaken = defect_detector.detect_defects(
         image, background_image=bg_image, non_foil_blackout=rem_bg
     )
     return defect_image[..., ::-1], defect_map, timetaken
@@ -58,7 +58,7 @@ def video_mod(video: str, debug: bool = False) -> str:
 
     defect_detector = VideoDefectDetector(method="background_subtractor")
 
-    output_defect_video, output_mask_video = defect_detector.detect_defects(
+    output_defect_video, output_mask_video, _ = defect_detector.detect_defects(
         video, debug=debug
     )
 
@@ -85,10 +85,6 @@ example_test_video_path = os.path.join(
     os.path.dirname(__file__), "data", "test_video.mp4"
 )
 
-
-# test_img = gr.Image(type="filepath")
-# test_bg_img = gr.Image(type="filepath")
-# test_vid = gr.Video(type="filepath")
 
 with gr.Blocks() as demo:
     gr.Markdown("# Defect Detection Demo")

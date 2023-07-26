@@ -46,6 +46,7 @@ def detect(
     defect_image = image.copy()
     defect_map = np.zeros_like(image)
 
+    bboxes = []
     # Overlay the results on the image
     for result in results:
         # Get the bounding box and class of the defect
@@ -54,6 +55,7 @@ def detect(
         cls = int(result.boxes.cls.cpu().numpy())
         if cls == 0:
             color = (0, 0, 255)
+            bboxes.append((box[0], box[1], box[2] - box[0], box[3] - box[1]))
         # Overlay the bounding box on the image
         defect_image = cv2.rectangle(
             defect_image, (box[0], box[1]), (box[2], box[3]), color, 2
@@ -62,7 +64,7 @@ def detect(
         defect_map = cv2.rectangle(
             defect_map, (box[0], box[1]), (box[2], box[3]), (255, 255, 255), -1
         )
-    return defect_image, defect_map
+    return defect_image, defect_map, bboxes
 
 
 # %%
@@ -75,8 +77,9 @@ if __name__ == "__main__":
 
     # Run the defect detector
     t0 = time.time()
-    defect_image, defect_map = detect(test_image)
+    defect_image, defect_map, bboxes = detect(test_image)
     print(f"Time taken: {time.time() - t0:.4f} seconds")
+    print(f"Detected {len(bboxes)} defects")
 
     # Display the results
     cv2.imshow("Defect Image", defect_image)

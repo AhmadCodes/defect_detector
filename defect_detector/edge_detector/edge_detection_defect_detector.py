@@ -48,16 +48,18 @@ def detect(image: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     # Create a copy of the image for drawing contours
     contour_image = image_rgb.copy()
 
+    bboxes = []
     # Iterate over the contours and draw them on the contour image
     for contour in contours:
         x, y, w, h = cv2.boundingRect(contour)
+        bboxes.append((x, y, w, h))
 
         # Draw the bounding box on the image
         cv2.rectangle(
             contour_image, (x, y), (x + w, y + h), (0, 0, 255), 2
         )  # Red color, thickness 2
 
-    return contour_image, canny_edges
+    return contour_image, canny_edges, bboxes
 
 
 # %%
@@ -70,8 +72,10 @@ if __name__ == "__main__":
 
     # Run defect detector
     t0 = time.time()
-    defect_contours, defect_edges = detect(test_image)
+    defect_contours, defect_edges, bboxes = detect(test_image)
     print(f"Execution Time: {time.time() - t0}s")
+    print(f"Detected {len(bboxes)} defects")
+
     # Show the images
     cv2.imshow("Detected Defects", defect_contours)
     cv2.imshow("Detected Edges", defect_edges)

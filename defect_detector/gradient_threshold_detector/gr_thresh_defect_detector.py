@@ -74,15 +74,17 @@ def detect(
     contour_image = (
         image.copy() if image.ndim == 3 else cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
     )
+    bboxes = []
     for contour in contours:
         area = cv2.contourArea(contour)
         if area > min_defect_area:
             x, y, w, h = cv2.boundingRect(contour)
+            bboxes.append((x, y, w, h))
             defects.append((x, y, w, h))
             # draw the rectangle on the defect contours on the original image
             cv2.rectangle(contour_image, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
-    return contour_image, binary_image
+    return contour_image, binary_image, bboxes
 
 
 # %% Test the detector if this file is run directly
@@ -95,8 +97,9 @@ if __name__ == "__main__":
 
     t0 = time.time()
     # Detect defects in the test image
-    defect_image, binary_image = detect(test_image)
+    defect_image, binary_image, bboxes = detect(test_image)
     print(f"Time taken: {time.time() - t0:.4f} seconds")
+    print(f"Detected {len(bboxes)} defects")
 
     # Show the images
     cv2.imshow("Detected defects", defect_image)

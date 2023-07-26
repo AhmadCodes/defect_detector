@@ -114,7 +114,7 @@ def drawcontours(image: np.ndarray, contours: any) -> np.ndarray:
     defect_image = (
         cv2.cvtColor(image, cv2.COLOR_GRAY2BGR) if image.ndim == 2 else image.copy()
     )
-
+    bboxes = []
     # draw recatngles around contours
     for c in contours:
         rect = cv2.boundingRect(c)
@@ -129,8 +129,9 @@ def drawcontours(image: np.ndarray, contours: any) -> np.ndarray:
             (0, 0, 255),
             2,
         )
+        bboxes.append(rect)
 
-    return defect_image
+    return defect_image, bboxes
 
 
 # %%
@@ -175,7 +176,7 @@ def detect(
     # Initialize useful variables
     n_frame = 0  # For frame counting
     beta = 0.8  # Moving average hyperparameter for background modeling
-
+    frames_bboxes = []
     # Desired output video parameters
 
     output_height = 256
@@ -200,6 +201,7 @@ def detect(
     )
     # loop over the frames of the video
     while True:
+        bboxes = []
         # get the current frame
         (ret, frame) = cap.read()
         if not isinstance(frame, np.ndarray) or not ret:
@@ -251,7 +253,7 @@ def detect(
             # If contour/object is detected in the foreground
             if contours is not None:
                 # make and show bounding boxes over objects in foreground
-                drawn_image = drawcontours(frame, contours)
+                drawn_image, bboxes = drawcontours(frame, contours)
 
         if debug:
             cv2.imshow("Draw Defects", drawn_image)
@@ -259,6 +261,8 @@ def detect(
             keypress = cv2.waitKey(1) & 0xFF
             if keypress == ord("q"):
                 break
+
+        frames_bboxes.append(bboxes)
 
         # write to output video
         drawn_image = (
@@ -291,7 +295,7 @@ def detect(
             f"Output video paths for defect detection video: {output_vid_path1} and defect mask video: {output_vid_path2}"
         )
 
-    return output_vid_path1, output_vid_path2
+    return output_vid_path1, output_vid_path2, frames_bboxes
 
 
 # %% Test the function if run as a script

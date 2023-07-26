@@ -45,11 +45,13 @@ def detect(image: np.ndarray, background: np.ndarray) -> tuple[np.ndarray, np.nd
         else cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
     )
     # Draw the bboxes around the contours
+    bboxes = []
     for contour in contours:
         x, y, w, h = cv2.boundingRect(contour)
+        bboxes.append((x, y, w, h))
         cv2.rectangle(contour_image, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
-    return contour_image, thresh
+    return contour_image, thresh, bboxes
 
 
 # %% Test the function if run directly
@@ -61,10 +63,11 @@ if __name__ == "__main__":
     import time
 
     t0 = time.time()
-    defect_image, defect_mask = detect(
+    defect_image, defect_mask, bboxes = detect(
         cv2.imread(test_image_path), cv2.imread(test_background_path)
     )
     print(f"Time taken: {time.time() - t0}")
+    print(f"Detected {len(bboxes)} defects")
 
     cv2.imshow("Defect Image", defect_image)
     cv2.imshow("Defect Mask", defect_mask)

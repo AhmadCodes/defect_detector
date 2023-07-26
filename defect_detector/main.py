@@ -84,11 +84,11 @@ class ImageDefectDetector:
                 image, background_image
             )
         else:
-            defect_image, defect_map = self.defect_detection_method(image)
+            defect_image, defect_map, bboxes = self.defect_detection_method(image)
         detection_time = time.time() - t0
 
         # Return the defect image and defect map
-        return defect_image, defect_map, detection_time
+        return defect_image, defect_map, bboxes, detection_time
 
 
 # %% Video Defect Detector Class
@@ -101,7 +101,7 @@ class VideoDefectDetector:
             VideoDefectDetectionFactory.create_defect_detection_method(self.method)
         )
 
-    def detect_defects(self, video: str, debug: bool = False) -> str:
+    def detect_defects(self, video: str, debug: bool = False) -> tuple[str, str, list]:
         """
         Detect defects in a video using the specified method.
 
@@ -112,10 +112,15 @@ class VideoDefectDetector:
 
         Returns
         -------
-        str
-            The defect video.
+        tuple[str,str,list]
+            A tuple containing the path to the annotated defect video, path to the defect mask video, \
+            and frames bboxes where each element in the frames_bboxes contains a list of bboxes for the given frame in that sequence.
         """
 
-        output_vid = self.defect_detection_method(video, debug=debug)
+        (
+            output_detection_vid,
+            output_mask_vid,
+            frames_bboxes_list,
+        ) = self.defect_detection_method(video, debug=debug)
 
-        return output_vid
+        return output_detection_vid, output_mask_vid, frames_bboxes_list
