@@ -1,14 +1,65 @@
 */*__pycache__
-
 */*__pycache__/*
 defect_detector/video_bg_sub_detector/__pycache__
 flagged
 flagged/*
-
-
 .vscode
 .vscode/*
-
-
 .pytest_cache
 .pytest_cache/*
+
+# Compiled files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Virtual environments
+venv/
+env/
+*.env
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# Jupyter Notebook specific
+.ipynb_checkpoints/
+*.ipynb
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# IDE specific (add more if needed)
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.pyc
+*.sage.py
+
+# Ignore the generated documentation
+doc/_build/
+
+# Ignore the generated coverage reports
+htmlcov/
+.coverage
+.coverage.*
+
+# Ignore the gradio app output folder (if applicable)
+grapp/
+
+# Ignore the output videos or images (if applicable)
+output/
+
+# Ignore any temporary or backup files
+*.tmp
+*~

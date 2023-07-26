@@ -80,7 +80,7 @@ class ImageDefectDetector:
                 raise ValueError(
                     "Background image must be provided for background subtraction method."
                 )
-            defect_image, defect_map = self.defect_detection_method(
+            defect_image, defect_map, bboxes = self.defect_detection_method(
                 image, background_image
             )
         else:

@@ -12,13 +12,14 @@ Defect detection is a crucial task in various industries, especially in manufact
 
 ### Requirements
 
-Before running the Defect Detection GUI, ensure that you have the following prerequisites:
+Before running the Defect Detection GUI and the library, ensure that you have the following prerequisites:
 
-- Python installed on your system.
+- **Python 3.10** installed on your system.
 - Required libraries:
   - Gradio
   - NumPy
-  - 
+  - ultralytics (for object detection using yolov8n)
+  - opencv-python
 
 ### Installation
 
@@ -101,5 +102,76 @@ Use the detect_defects method to detect defects in an image.
 image = cv2.imread("path_to_image.jpg")
 
 # Detect defects in the image
-defect_detection_image, defect_mask, timetaken = defect_detector.detect_defects(image)
+defect_detection_image, defect_mask, bboxes, timetaken = defect_detector.detect_defects(image)
 ```
+The `ImageDefectDetector.detect_defects()` method expects a `background_image` parameter when the provided method is `background_remover`
+
+```python
+from defect_detector import ImageDefectDetector
+
+method = "background_subtractor"  # Choose any method from the available methods
+image_defect_detector = ImageDefectDetector(method)
+
+# Example image
+image = ...  # Your image as a NumPy array
+
+# Optional background image for "background_subtractor" method
+background_image = ...  # Background image as a NumPy array (Required for "background_subtractor" method)
+
+# Optional flag to blackout non-foil region
+non_foil_blackout = True  # Set to True if you want to blackout non-foil region
+
+# Detect defects in the image
+defect_image, defect_mask, bboxes, detection_time = image_defect_detector.detect_defects(image, background_image, non_foil_blackout)
+
+```
+
+The `detect_defects()` method returns a tuple containing the following items:
+
+- `defect_image`: Annotated defect image (NumPy array)
+- `defect_mask`: Defect map (NumPy array)
+- `bboxes`: List of bounding boxes around detected defects
+- `detection_time`: Time taken for defect detection in seconds
+
+### `VideoDefectDetector` Class
+
+The `VideoDefectDetector` class is used to detect defects in a video using the specified method. Currently, the only available method for video defect detection is "background_subtractor".
+
+#### Creating a `VideoDefectDetector` Object
+To use the `VideoDefectDetector` class, create an instance of the class with the desired defect detection method:
+
+```python
+from defect_detector import VideoDefectDetector
+
+method = "background_subtractor"  # Currently, only "background_subtractor" method is available for video defect detection
+video_defect_detector = VideoDefectDetector(method)
+```
+
+#### Detecting Defects in a Video
+Once you have created a `VideoDefectDetector` object, you can use the `detect_defects()` method to detect defects in a video:
+
+```python
+# Example video file path
+video_path = "path/to/your/video.mp4"
+
+# Optional flag for debugging (will show the processed video using OpenCV HighGUI)
+debug = False
+
+# Detect defects in the video
+output_defect_video, output_mask_video, frames_bboxes_list = video_defect_detector.detect_defects(video_path, debug)
+```
+
+The `detect_defects()` method returns a tuple containing the following items:
+
+- `output_defect_video`: Path to the annotated defect video (str)
+- `output_mask_video`: Path to the defect mask video (str)
+- `frames_bboxes_list`: A list of lists, where each element in frames_bboxes_list contains a list of bounding boxes for the given frame in the video.
+
+
+### **Note**
+
+    - Make sure to replace `path/to/your/video.mp4` with the actual path to your video file.
+    - The defect_detector module uses the OpenCV library for image and video processing. Ensure that you have OpenCV installed (pip install opencv-python) before using the module.
+    - Feel free to import the `defect_detector` module into your own Python script or Jupyter Notebook and use these classes and methods to perform defect detection on your own image and video data.
+
+    - For more detailed information on the methods, classes, and their parameters, refer to the docstrings in the `defect_detector` module.

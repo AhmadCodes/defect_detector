@@ -32,7 +32,7 @@ def test_invalid_method_type():
 
 def test_detect_defects():
     detector = ImageDefectDetector(method="edge_detector")
-    defect_image, defect_map, _ = detector.detect_defects(
+    defect_image, defect_map, _, _ = detector.detect_defects(
         test_image, non_foil_blackout=True
     )
     # Add assertions to check the results, e.g., using numpy's assert functions
@@ -40,7 +40,7 @@ def test_detect_defects():
 
 def test_detect_defects_non_foil_blackout():
     detector = ImageDefectDetector(method="otsu_thresh_detector")
-    defect_image, defect_map, _ = detector.detect_defects(
+    defect_image, defect_map, _, _ = detector.detect_defects(
         test_image, non_foil_blackout=False
     )
 
@@ -61,13 +61,13 @@ def test_detect_defects_different_methods():
     for method in methods:
         detector = ImageDefectDetector(method=method)
         if method == "background_subtractor":
-            defect_image, defect_map, _ = detector.detect_defects(
+            defect_image, defect_map, _, _ = detector.detect_defects(
                 image=test_image,
                 background_image=background_image,
                 non_foil_blackout=True,
             )
         else:
-            defect_image, defect_map, _ = detector.detect_defects(
+            defect_image, defect_map, _, _ = detector.detect_defects(
                 test_image, non_foil_blackout=True
             )
 
@@ -77,7 +77,7 @@ def test_detect_defects_different_methods():
 
 def test_non_foil_blackout_enabled():
     detector = ImageDefectDetector()
-    defect_image_with_blackout, _, _ = detector.detect_defects(
+    defect_image_with_blackout, _, _, _ = detector.detect_defects(
         test_image, non_foil_blackout=True
     )
 
@@ -87,7 +87,7 @@ def test_non_foil_blackout_enabled():
 
 def test_non_foil_blackout_disabled():
     detector = ImageDefectDetector()
-    defect_image_without_blackout, _, _ = detector.detect_defects(
+    defect_image_without_blackout, _, _, _ = detector.detect_defects(
         test_image, non_foil_blackout=False
     )
 
@@ -114,7 +114,7 @@ def test_performance():
     import time
 
     start_time = time.time()
-    defect_image, defect_map, _ = detector.detect_defects(
+    defect_image, defect_map, _, _= detector.detect_defects(
         test_image, non_foil_blackout=True
     )
     end_time = time.time()
