@@ -50,12 +50,12 @@ def detect(
     # Overlay the results on the image
     for result in results:
         # Get the bounding box and class of the defect
+        if len(result.boxes) == 0:
+            continue
         box = result.boxes.xyxy[0].cpu().numpy()
         box = box.astype(int)
-        cls = int(result.boxes.cls.cpu().numpy())
-        if cls == 0:
-            color = (0, 0, 255)
-            bboxes.append((box[0], box[1], box[2] - box[0], box[3] - box[1]))
+        color = (0, 0, 255)
+        bboxes.append((box[0], box[1], box[2] - box[0], box[3] - box[1]))
         # Overlay the bounding box on the image
         defect_image = cv2.rectangle(
             defect_image, (box[0], box[1]), (box[2], box[3]), color, 2
