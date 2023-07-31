@@ -55,17 +55,23 @@ def detect(
         box = result.boxes.xyxy[0].cpu().numpy()
         box = box.astype(int)
         color = (0, 0, 255)
-        bboxes.append((box[0], box[1], box[2] - box[0], box[3] - box[1]))
+        
+        xmin = box[0]
+        ymin = box[1]
+        xmax = box[2]
+        ymax = box[3]
+        w = xmax - xmin
+        h = ymax - ymin
+        bboxes.append((xmin, ymin, w, h))
         # Overlay the bounding box on the image
         defect_image = cv2.rectangle(
-            defect_image, (box[0], box[1]), (box[2], box[3]), color, 2
+            defect_image, (xmin, ymin), (xmax, ymax), color, 2
         )
         # Overlay the bounding region on the defect map
         defect_map = cv2.rectangle(
-            defect_map, (box[0], box[1]), (box[2], box[3]), (255, 255, 255), -1
+            defect_map, (xmin, ymin), (xmax, ymax), (255, 255, 255), -1
         )
     return defect_image, defect_map, bboxes
-
 
 # %%
 if __name__ == "__main__":

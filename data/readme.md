@@ -10,7 +10,7 @@ Place these files in the data directory to successfully run the tests, with the 
 
 
 ## **NOTE:** 
-    Test data can be downloaded from here: [LINK (Access Retricted)](https://drive.google.com/drive/folders/1scgAgyzG3iIKUBEd1XKLPuQKiUxQexNy?usp=sharing)
+Test data can be downloaded from here: [LINK Access Retricted](https://drive.google.com/drive/folders/1scgAgyzG3iIKUBEd1XKLPuQKiUxQexNy?usp=sharing)
 
 
 

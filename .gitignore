@@ -63,3 +63,6 @@ output/
 # Ignore any temporary or backup files
 *.tmp
 *~
+
+
+benchmark.py
